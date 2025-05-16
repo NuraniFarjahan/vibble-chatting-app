@@ -1,0 +1,69 @@
+/* ---------font link start ----*/
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+/* ------font link end------- */
+/* ---------common css start------ */
+*{
+    margin:0;
+    padding:0;
+    outline:0;
+    box-sizing:border-box;
+}
+ul,ol{
+     list-style:none;
+
+}
+a{
+    display:inline-block;
+    text-decoration:none;
+}
+h1,h2,h3,h4,h5,h6,p,ul,ol{
+    margin:0;
+    padding:0;
+}
+img{
+    width:100%;
+    max-width:100%;
+
+}
+:root{
+    --inter:"Inter", sans-serif;
+}
+body{
+    background-color:#243034 ;
+}
+/* ---------common css end-------- */
+/* ---------navbar part start------ */
+
+    
+    
+
+.main_nav img{
+    width:130px;
+    height:40px;
+}
+.main_nav ul{
+    gap:80px;
+    
+}
+.home_b a{
+    color:black;
+}
+.main_nav ul li a{
+    font-size:16px;
+    font-weight:600;
+    font-family:var(--inter);
+    color:#fff !important;
+    padding:0 !important;
+    
+}
+
+/* ---------navbar part end-------- */
+/* ---------bicycle part start------ */
+#bicycle{
+    padding-top: 63px;
+}
+
+/* ---------bicycle part end-------- */
+/* ---------common css start------ */
+
+/* ---------common css end-------- */

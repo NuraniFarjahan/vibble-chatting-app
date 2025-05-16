@@ -1,0 +1,22 @@
+.item{
+    width:700px;
+    height:600px;
+    background:pink;
+    display: flex;
+    order: ;
+}
+.c1{
+    width:200px;
+    height:200px;
+    background:purple;
+}
+.c2{
+    width:200px;
+    height:200px;
+    background:rgb(15, 4, 4);
+}
+.c3{
+    width:200px;
+    height:200px;
+    background:rgb(185, 73, 25);
+}

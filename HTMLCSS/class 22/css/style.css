@@ -1,0 +1,517 @@
+/* ---------------font links part--------- */
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
+
+/* --------------font links part----------- */
+
+/* --------------common css part start--------- */
+*{
+    margin:0;
+    padding:0;
+    outline:0;
+    box-sizing:border-box;
+}
+ul,ol{
+    list-style:none;
+}
+a{
+    display:inline-block;
+    text-decoration:none;
+}
+h1,h2,h3,h4,h5,h6,p,ui,ol{
+    margin:0;
+    padding:0;
+}
+img{
+    width:100%;
+    max-width:100%;
+    vertical-align:middle;
+}
+:root{
+    --ubuntu:"Ubuntu", sans-serif;
+    --primaryColor:#42454A;
+}
+.common_head{
+    text-align: center;
+}
+.common_head h2{
+     font-size:50px;
+     font-weight:700;
+     font-family:var(--ubuntu);
+     color:var(--primaryColor);
+     margin-bottom:34px;
+}
+.common_head p{
+    font-size:20px;
+    font-weight:400;
+    font-family:var(--ubuntu);
+    color:var(--primaryColor);
+}
+/* --------------navbar part start--------- */
+.main_menu{
+    padding:26px 0;
+    border-bottom:1px solid #EAE8F3;
+}
+.main_menu img{
+    width:70px;
+}
+.main_menu ul{
+    gap:75px;
+}
+.main_menu ul li{
+    font-size: 14px;
+    font-weight:400;
+    font-family:var(--ubuntu);
+    padding:0 !important;
+}
+.menu_buttons a:nth-child(1){
+    width:102px;
+    height:48px;
+    border-radius:4px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:14px;
+    font-weight:400;
+    font-family:var(--ubuntu);
+    color:var(--primaryColor);
+}
+.menu_buttons a:nth-child(2){
+    width:106px;
+    height:48px;
+    border-radius:4px;
+    display:flex;
+    justify-content:center;
+    align-items:center;font-size:14px;
+    font-weight:400;
+    font-family:var(--ubuntu);
+    color:#fff;
+    background-color: var(--primaryColor);
+
+}
+.menu_buttons{
+    width:232px;
+    display:flex;
+    gap:24px;
+}
+/* --------------navbar part end----------- */
+/* --------------banner part start--------- */
+#banner{
+    position:relative;
+    padding-top:84px;
+}
+.banner_text h1{
+    font-size: 90px;
+    font-weight:300;
+    font-family:var(--ubuntu);
+    color:var(--primaryColor);
+    text-transform:uppercase;
+}
+.banner_text h1 span{
+    font-weight:700;
+    display:block;
+}
+.banner_text .banner_line{
+    width:335px;
+    height:4px;
+    background: var(--primaryColor);
+    margin-top:93px;
+    margin-bottom:62px;
+
+}
+.banner_text p{
+    width:353px;
+    font-size:22px;
+    font-weight:400;
+    font-family:var(--ubuntu);
+    color:var(--primaryColor);
+}
+.banner_buttons{
+    display:flex;
+    gap:50px;
+    align-items: center;
+    margin-top: 44px;
+}
+.banner_buttons span{
+    width:58px;
+    height:58px;
+    background: #c7c8c9;
+    display:inline-block;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:20px;
+    color:#fdf9f7;
+}
+.banner_buttons .buy{
+    font-size:20px;
+    font-weight:500;
+    font-family:var(--ubuntu);
+    color:#17181A;
+    display:flex;
+    align-items:center;
+    gap:21px;
+
+}
+.banner_buttons .videoOpen{
+    width:87px;
+    font-size:18px;
+    font-weight:500;
+    font-family:var(--ubuntu);
+    color:#414449;
+}
+.banner_buttons .play{
+    width:80px;
+    animation:round 3s linear infinite;
+}
+@keyframes round{
+    from{
+        transform:rotate(0deg);
+    }
+    to{
+        transform:rotate(360deg);
+    }
+}
+.banner_image{
+    position:absolute;
+    top:31px;
+    right:0;
+    
+}
+/* --------------banner part end----------- */
+/* --------------counter part start--------- */
+#counter{
+    padding-top:209px;
+}
+#counter .single_counter{
+    width:174px;
+    height:137px;
+    border-radius:7px;
+   box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
+   display:flex;
+   flex-direction: column;
+   justify-content: center;
+   align-items: center;
+   gap:18px;
+   
+}
+ .single_counter h2{
+    font-size:18px;
+    font-weight:700;
+    font-family:var(--ubuntu);
+    color:var(--primaryColor);
+}
+.single_counter h2 span{
+     font-size:40px;
+     
+}
+.single_counter p{
+    font-size:13px;
+    font-weight:400;
+    font-family:var(--ubuntu);
+    color:var(--primaryColor);
+    
+}
+.all_counters{
+     display:flex;
+     justify-content:space-between;
+}
+/* --------------counter part end----------- */
+/* --------------information part start--------- */
+#information{
+    padding-top:127px;
+}
+.information_row img{
+    margin-top:22px;
+    
+}
+.information_text ul {
+    margin-top: 143px;
+
+}
+.information_text ul li{
+    display:flex;
+    gap:18px;
+    margin-bottom: 34px;
+    align-items:center;
+}
+.information_text ul li:last-child{
+    margin: 0;
+    
+}
+.information_text ul li img{
+    width:49px;
+    margin:0;
+    
+}
+.information_text ul li p{
+    font-size:20px;
+    font-weight:400;
+    font-family:var(--ubuntu);
+    color:var(--primaryColor);
+    
+    
+}
+
+/* --------------information part end----------- */
+/* --------------motor part start--------- */
+#motor{
+    padding-top:126px;
+}
+.motor_img img{
+    margin-top:49px;
+}
+/* --------------motor part end----------- */
+/* --------------Accessories part start--------- */
+#Accessories{
+    padding-top:315px;
+}
+.accessories_row{
+    margin-top:112px;
+}
+.Accessories_text h2{
+    font-size:50px;
+    font-weight:700;
+    font-family:var(--ubuntu);
+    color:var(--primaryColor);
+}
+.Accessories_text ul li{
+    display:flex;
+    gap:18px;
+    align-items:center;
+    margin-top:33px;
+}
+.Accessories_text ul li img{
+    width:49px;
+}
+.Accessories_text ul li p{
+    font-size:20px;
+    font-weight:400;
+    font-family:var(--ubuntu);
+    color:var(--primaryColor);
+}
+/* --------------Accessories part end----------- */
+/* --------------shopping part start--------- */
+#shopping{
+    margin-top:131px;
+    position:relative;
+}
+.shopping_text{
+    display:flex;
+    flex-direction:column;
+    align-items:end;
+}
+.shopping_text h2{
+    font-size:50px;
+    font-weight:700;
+    font-family:var(--ubuntu);
+    color:var(--primaryColor);
+}
+.shopping_text ul li{
+    display:flex;
+    gap:18px;
+    align-items:center;
+    margin-top:33px;
+}
+.shopping_text ul li img{
+    width:49px;
+}
+.shopping_text ul li p{
+    font-size:20px;
+    font-weight:400;
+    font-family:var(--ubuntu);
+    color:var(--primaryColor);
+}
+.shopping_trolly img{
+    width:779px;
+    position:absolute;
+    top:0;
+    left:0;
+}
+#more{
+    padding-top:74px;  
+}
+.more_text h3{
+    font-size:30px;
+    font-weight:700;
+    font-family:var(--ubuntu);
+    color:var(--primaryColor);
+    border: 2px solid #42454A ;
+    border-radius: 10px;
+    width:570px;
+    height:94px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    margin:auto;
+}
+
+/* --------------shopping css part end----------- */
+/* --------------common css part start--------- */
+
+/* footer start  */
+#footer{
+    color: white;
+    padding-top: 92px;
+    
+    position: relative;
+}
+
+#footer .main .row img{
+    position: absolute;
+    left: 0px;
+    bottom: 70px;
+    width:729px;
+}
+#footer li{
+    margin-bottom: 40px;
+
+}
+
+#footer .list{
+    gap: 100px;
+}
+#footer .row{
+    padding-top: 99px;
+    padding-bottom: 141px;
+}
+.list-header{
+    font-size: 22px;
+    font-family: var(--ubuntu);
+    color: #FBFBFB;
+    font-weight: 700;
+    margin-bottom: 54px;
+    
+
+}
+#footer .main{
+    background: #42454A;
+}
+#footer .icons{
+    gap: 16px;
+    align-items: center;
+}
+#footer ul{
+    padding: 0;
+}
+
+/* --------------common css part end----------- */
+/* --------------gallery part start--------- */
+#gallery{
+    padding-top:127px;
+}
+.gallery_img_1{
+    margin-top:302px;
+}
+.gallery_buttons{
+    display:flex;
+    flex-direction:column;
+    gap:27px;
+    margin-top:55px;
+}
+.gallery_buttons a{
+     width:570px;
+     height:94px;
+     border:2px solid var(--primaryColor);
+     border-radius:10px;
+     font-size:30px;
+     font-weight:400;
+     font-family:var(--ubuntu);
+     color:var(--primaryColor);
+     display:flex;
+     justify-content:center;
+     align-items:center;
+}
+.gallery_images{
+    margin-top:112px;
+}
+.gallery_images .img2{
+    margin-top:96px;
+}
+/* --------------gallery part end----------- */
+/* --------------color part start--------- */
+#colors{
+    padding-top: 128px;
+}
+.my_slider_nav .nav_slider_item img{
+    width:246px;
+}
+.myslider{
+    position:relative;
+    margin-top: 152px;
+}
+.my_slider_nav{
+    width:100%;
+    position:absolute;
+    bottom:-200px;
+    left:52%;
+    transform:translateX(-50%);
+}
+/* --------------color part end----------- */
+/* --------------Testimonials part start--------- */
+#testimonials{
+    margin-top:366px;
+    padding-top:78px;
+    padding-bottom:167px;
+    background: #FAFAFA;
+}
+.myslider_single_item{
+    width:360px;
+    height:366px;
+    border:1px solid #D8D8D8;
+    padding:52px 22px 54px 34px;
+}
+.myslider_single_item ul{
+     display:flex;
+     color:#FE8B75;
+     justify-content:center;
+     
+}
+.myslider_single_item h2{
+    font-size:20px;
+    font-weight:400;
+    font-family:var(--ubuntu);
+    color:var(--primaryColor);
+    margin-top: 12px;
+    margin-bottom: 47px;
+    text-align: center;
+}
+.profile .profile_pic{
+    width:48px;
+    height:48px;
+    border-radius:50%;
+    overflow:hidden;
+}
+/* --------------Testimonials part end----------- */
+/* -------------- part start--------- */
+
+/* --------------common css part end----------- */
+/* --------------common css part start--------- */
+
+/* --------------common css part end----------- */
+/* --------------common css part start--------- */
+
+/* --------------common css part end----------- */
+
+/* --------------common css part start--------- */
+
+/* --------------common css part end----------- */
+/* --------------common css part start--------- */
+
+/* --------------common css part end----------- */
+/* --------------common css part start--------- */
+
+/* --------------common css part end----------- */
+/* --------------common css part start--------- */
+
+/* --------------common css part end----------- */
+/* --------------common css part start--------- */
+
+/* --------------common css part end----------- */
+/* --------------common css part start--------- */
+
+/* --------------common css part end----------- */
+
+.navbar-nav .nav-link.active, .navbar-nav .nav-link.show {
+    color: inherit;
+}

@@ -1,0 +1,61 @@
+.myslider{
+    width:80%;
+    margin:0 auto;
+    position:relative;
+
+}
+.myslider img{
+    width:100%;
+    height:300px;
+}
+ .slick-slide{
+    padding:0 10px;
+ }
+
+
+.arrow{
+   width:30px;
+   height:30px;
+   border:2px solid #2e8b87;
+   border-radius: 50%;
+   display:flex;
+   justify-content:center;
+   align-items:center;
+   color:#2e8b87;
+   transition:all linear .3s;
+   position:absolute;
+   
+}
+.arrow:hover{
+    color:rgb(184, 245, 236);
+    background: #2e8b87;
+}
+.prevarrow{
+    top:40%;
+    left:-5%;
+    z-index:10;
+}
+.nextarrow{
+    top:40%;
+    right:-5%;
+}
+.slick-dots{
+    list-style: none;
+    display:flex;
+    gap:10px;
+    justify-content: center;
+    
+    
+}
+.slick-dots li button{
+    font-size: 0;
+    width:10px;
+    height:10px;
+    margin:0;
+    padding:0;
+    border:1px  solid #2e8b87;
+    border-radius:50%;
+}
+.slick-dots .slick-active  button{
+    background:rgb(3, 200, 200);
+}
