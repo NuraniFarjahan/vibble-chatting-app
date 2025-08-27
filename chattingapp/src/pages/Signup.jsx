@@ -4,6 +4,7 @@ import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { getAuth, createUserWithEmailAndPassword, updateProfile, sendEmailVerification } from "firebase/auth";
 import { HashLoader, PropagateLoader } from 'react-spinners';
 import { Link, useNavigate } from 'react-router';
+import { getDatabase, ref, set } from "firebase/database";
 
 export default function Signup() {
   const [firstName, setFirstName] = useState("");
@@ -26,6 +27,7 @@ export default function Signup() {
   const [showConPass, setShowConPass]= useState(false)
   const [loading, setLoading]= useState(false)
   const auth = getAuth();
+  const db= getDatabase()
   const navigate=useNavigate()
 // First Name
 const handleFirstNameChange = (e) => {
@@ -107,12 +109,19 @@ setLoading(true)
 
 createUserWithEmailAndPassword(auth, email, password)
   .then(() => {
+    updateProfile(auth.currentUser, {
+  displayName:`${firstName} ${lastName}`,
+})
     sendEmailVerification(auth.currentUser)
       .then(() => {
         toast.success("Sign up successful! Please verify your email");
         setTimeout(() => {
           navigate("/login");
         }, 2000);
+        set(ref(db, 'users/' + auth.currentUser.uid), {
+    username: `${firstName} ${lastName}`,
+    email: email,
+  });
         setEmail("");
         setFirstName("");
         setLoading(false)

@@ -1,16 +1,20 @@
 import React, { useState } from 'react';
 import { FaEye, FaEyeSlash, FaGoogle, FaFacebook } from 'react-icons/fa';
 import { Toaster, toast } from 'react-hot-toast';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import { getAuth, onAuthStateChanged, signInWithEmailAndPassword } from 'firebase/auth';
+import { useDispatch } from 'react-redux';
+import { setUser } from '../features/userInfoSlice';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const auth = getAuth();
+  const navigate=useNavigate()
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [loading, setLoading] = useState(false);
+  const dispatch= useDispatch()
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -32,7 +36,9 @@ signInWithEmailAndPassword(auth, email, password)
     onAuthStateChanged(auth, (user) => {
   if (user.emailVerified) {
 toast.success('Login successful!');
+    dispatch(setUser(userCredential.user))
       console.log(userCredential.user);
+      navigate("/")
       setLoading(false)
   } else {
       toast.error('Please Verify Your Email');
