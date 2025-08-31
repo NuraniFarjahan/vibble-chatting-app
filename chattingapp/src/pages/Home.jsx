@@ -1,4 +1,4 @@
-import { getDatabase, onValue, ref } from 'firebase/database';
+import { getDatabase, onValue, push, ref, remove, set } from 'firebase/database';
 import React, { useEffect, useState } from 'react';
 import { 
   BsThreeDotsVertical, 
@@ -13,17 +13,33 @@ import {
 import { IoCallOutline, IoVideocamOutline } from 'react-icons/io5';
 import { useDispatch, useSelector } from 'react-redux';
 import { roomUser } from '../features/userInfoSlice';
+import { useNavigate } from 'react-router';
+import toast, { Toaster } from 'react-hot-toast';
+import moment from 'moment/moment';
 
 const Home = () => {
-  const user=useSelector((state)=>state.userInfo.value)
+  const data=useSelector((state)=>state.userInfo.value)
    const roomuser=useSelector((state)=>state.userInfo.roomUser)
   const db= getDatabase()
   // State to manage mobile view
   const [showChat, setShowChat] = React.useState(false);
   const [isMobile, setIsMobile] = React.useState(false);
   const [chatUser, setChatUser]= useState([])
+  const [messageList, setMessageList]= useState([])
   const dispatch=useDispatch()
+  const navigate=useNavigate()
+  const [filteredUser, setFilteredUser]= useState([])
   const [loading, setLoading]= useState(true)
+  const [blockList, setBlockList]= useState([])
+  const [message, setMessage]=useState("")
+  // const [status, setStatus]= useState(()=>{
+  //   const localStatus= localStorage.getItem("isNew")
+  //   if (localStatus=="old") {
+  //     return "old"
+  //   }else{
+  //     return "new"
+  //   }
+  // })
 
   // Check if screen is mobile size
   React.useEffect(() => {
@@ -38,6 +54,33 @@ const Home = () => {
     window.addEventListener('resize', checkScreenSize);
     return () => window.removeEventListener('resize', checkScreenSize);
   }, []);
+  useEffect(() => {
+        const starCountRef = ref(db, 'block/');
+        onValue(starCountRef, (snapshot) => {
+          let arr=[]
+          snapshot.forEach((item)=>{
+            const users= item.val()
+            if (users.blockerId==data?.uid || users.blockedId==data?.uid) {
+              arr.push(users.blockerId+users.blockedId)
+            }
+          })
+          setBlockList(arr)
+        });
+}, [])
+  useEffect(() => {
+        const starCountRef = ref(db, 'message/');
+        onValue(starCountRef, (snapshot) => {
+          let arr=[]
+          snapshot.forEach((item)=>{
+            const users= item.val()
+            if (users.senderId==data?.uid && users.reciverId==roomuser?.id || users.senderId==roomuser?.id && users.reciverId==data?.uid) {
+              arr.push({...users, id: item.key})
+            }
+          })
+          setMessageList(arr)
+        });
+}, [roomuser])
+      
 
   useEffect(() => {
     const starCountRef = ref(db, 'chatuser/');
@@ -46,18 +89,21 @@ const Home = () => {
       snapshot.forEach((item)=>{
         const users= item.val()
         const usersId= item.key
-        if (users.adderId==user?.uid || users.reciverId==user?.uid) {
+        if (users.adderId==data?.uid || users.reciverId==data?.uid) {
           arr.push({...users, id: usersId})
         }
       })
       setChatUser(arr)
+      setFilteredUser(arr.filter((user)=>!(blockList.includes(user.adderId+user.reciverId) || blockList.includes(user.reciverId+user.adderId))))
       setLoading(false)
     });
-  }, [])
+  }, [blockList])
+
+  
 
   const handleUserSelect = (friend) => {
-    const friendId= friend.adderId==user.uid ? friend.reciverId : friend.adderId
-    const friendName= friend.adderId==user?.uid ? friend.reciverName : friend.adderName
+    const friendId= friend.adderId==data?.uid ? friend.reciverId : friend.adderId
+    const friendName= friend.adderId==data?.uid ? friend.reciverName : friend.adderName
 
     dispatch(roomUser({
       name: friendName,
@@ -65,12 +111,43 @@ const Home = () => {
     }))
   };
 
-  const handleBackToUsers = () => {
-    setShowChat(false);
+  const blockHandler = (item) => {
+    const blockerId= data?.uid 
+    const blockedId= item.adderId==data?.uid ? item.reciverId : item.adderId
+    const blockerName= data?.displayName
+    const blockedName= item.adderId==data?.uid ? item.reciverName : item.adderName
+    console.log(item);
+    set(push(ref(db, "block/")),{
+        blockerId: blockerId,
+        blockedId: blockedId,
+        blockerName: blockerName,
+        blockedName: blockedName
+      }).then(()=>{
+        toast.success("Blocked")
+        dispatch(roomUser(null))
+        remove(ref(db, "chatuser/" + item.id))
+        set(push(ref(db, "notification/")),{
+        reciverId: blockedId,
+        senderName: blockerName,
+        content: `${blockerName} blocked you!`,
+        time: moment().format()
+      })
+      })
   };
+
+  const sentMsgHandler=()=>{
+    set(push(ref(db, "message/")),{
+        senderId: data?.uid,
+        message: message,
+        reciverId: roomuser?.id,
+        time: moment().format(),
+        // blockedName: blockedName
+      }).then(()=>setMessage(""))
+  }
 
   return (
     <div className="flex h-screen flex-1 bg-gray-100">
+      <Toaster position='top-right'/>
       {/* Left Sidebar - Users List */}
       <div className={`${
         isMobile 
@@ -81,9 +158,9 @@ const Home = () => {
         <div className="bg-gray-100 p-3 md:p-4 flex items-center justify-between border-b border-gray-300">
           <div className="flex items-center space-x-3">
             <div className="w-8 h-8 md:w-10 md:h-10 bg-green-500 rounded-full flex items-center justify-center text-white font-semibold text-sm md:text-base">
-              {user?.displayName?.split(" ")[0][0]+user?.displayName?.split(" ")[1][0]}
+              {data?.displayName?.split(" ")[0][0]+data?.displayName?.split(" ")[1][0]}
             </div>
-            <h2 className="font-semibold text-gray-800 text-lg md:text-xl">{user?.displayName}</h2>
+            <h2 className="font-semibold text-gray-800 text-lg md:text-xl">{data?.displayName}</h2>
           </div>
           <div className="flex space-x-3 md:space-x-4 text-gray-600">
             <BsChatLeft className="w-4 h-4 md:w-5 md:h-5 cursor-pointer hover:text-gray-800" />
@@ -105,7 +182,7 @@ const Home = () => {
         {/* Users List */}
         <div className="flex-1 overflow-y-auto">
           {
-            loading ? (
+            loading  ? (
       <div className="bg-white p-3 md:p-4 border-b border-gray-100 cursor-pointer hover:bg-gray-50 active:bg-gray-100" ariaLabel="Loading user item">
         <div className="flex items-center space-x-3">
           <div className="relative">
@@ -119,9 +196,17 @@ const Home = () => {
         </div>
       </div>
 
-            ) : (
+            ) 
+            // :  loading || !loading && status=="new" && chatUser.length==0 ? (
+            //   <div className='flex jsutify-center flex-col mt-5 items-center gap-y-2'>
+            //     <p>Please Add Someone</p>
+            //     <button className='px-3 py-2 bg-green-500 rounded-lg ' onClick={()=>navigate("/allusers")}>Add</button>
+            //   </div>
+            // ) 
+            :
+             (
               <>
-                        {chatUser.map((user, i) => (
+                        {filteredUser.map((user, i) => (
             <div
               key={i}
               onClick={()=>handleUserSelect(user)}
@@ -130,21 +215,21 @@ const Home = () => {
               <div className="flex items-center space-x-3">
                 <div className="relative">
                   <div className="w-10 h-10 md:w-12 md:h-12 bg-gray-400 rounded-full flex items-center justify-center text-white font-semibold text-sm md:text-base">
-                    {user.adderId==user?.uid ? user.adderName.charAt(0).toUpperCase() : user.reciverName.charAt(0).toUpperCase()}
+                    {user.adderId==data?.uid ? user.adderName.charAt(0).toUpperCase() : user.reciverName.charAt(0).toUpperCase()}
                   </div>
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between">
-                    <h3 className="font-semibold text-gray-900 truncate text-sm md:text-base">{user.adderId==user?.uid ? user.adderName : user.reciverName}</h3>
-                    {/* <span className="text-xs text-gray-500 whitespace-nowrap ml-2">{user.time}</span> */}
+                    <h3 className="font-semibold text-gray-900 truncate text-sm md:text-base">{user.adderId==data?.uid ? user.reciverName : user.adderName}</h3>
+                    {/* <span className="text-xs text-gray-500 whitespace-nowrap ml-2">{user.time}</span> */} <span onClick={()=>blockHandler(user)} className="bg-red-500 text-white text-xs rounded-full px-2 py-1 min-w-[20px] text-center flex-shrink-0">
+                        Block
+                      </span>
+                    
+
                   </div>
                   <div className="flex items-center justify-between mt-1">
                     {/* <p className="text-sm text-gray-600 truncate pr-2">{user.lastMessage}</p> */}
-                    {/* {user.unread > 0 && (
-                      <span className="bg-green-500 text-white text-xs rounded-full px-2 py-1 min-w-[20px] text-center flex-shrink-0">
-                        {user.unread}
-                      </span>
-                    )} */}
+                    
                   </div>
                 </div>
               </div>
@@ -199,27 +284,27 @@ const Home = () => {
         <div className="flex-1 overflow-y-auto p-3 md:p-4 space-y-3 md:space-y-4" style={{
           backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23f0f0f0' fill-opacity='0.1'%3E%3Cpath d='m36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
         }}>
-          {/* {messages.map((message) => (
+          {messageList.map((message) => (
             <div
               key={message.id}
-              className={`flex ${message.sent ? 'justify-end' : 'justify-start'}`}
+              className={`flex ${message.senderId==data?.uid ? 'justify-end' : 'justify-start'}`}
             >
               <div
                 className={`max-w-[280px] sm:max-w-xs md:max-w-sm lg:max-w-md px-3 md:px-4 py-2 rounded-lg ${
-                  message.sent
+                  message.senderId==data?.uid
                     ? 'bg-green-500 text-white rounded-br-none'
                     : 'bg-white text-gray-800 rounded-bl-none shadow-sm'
                 }`}
               >
-                <p className="text-sm md:text-base leading-relaxed">{message.text}</p>
+                <p className="text-sm md:text-base leading-relaxed">{message.message}</p>
                 <p className={`text-xs mt-1 ${
-                  message.sent ? 'text-green-100' : 'text-gray-500'
+                  message.senderId==data?.uid ? 'text-green-100' : 'text-gray-500'
                 }`}>
-                  {message.time}
+                  {moment(message.time).fromNow()}
                 </p>
               </div>
             </div>
-          ))} */}
+          ))}
         </div>
 
         {/* Message Input */}
@@ -230,12 +315,14 @@ const Home = () => {
             <div className="flex-1 relative">
               <input
                 type="text"
+                value={message}
+                onChange={(e)=>setMessage(e.target.value)}
                 placeholder="Type a message"
                 className="w-full px-3 md:px-4 py-2 rounded-full bg-white border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm md:text-base"
               />
             </div>
             <BsMic className="w-5 h-5 md:w-6 md:h-6 text-gray-600 cursor-pointer hover:text-gray-800 flex-shrink-0 md:block hidden" />
-            <button className="bg-green-500 hover:bg-green-600 text-white p-2 rounded-full transition-colors flex-shrink-0">
+            <button onClick={sentMsgHandler} className="bg-green-500 hover:bg-green-600 text-white p-2 rounded-full transition-colors flex-shrink-0">
               <BsSend className="w-4 h-4 md:w-5 md:h-5" />
             </button>
           </div>

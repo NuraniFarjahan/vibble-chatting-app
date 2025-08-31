@@ -12,13 +12,18 @@ import { useSelector } from 'react-redux';
 import { BiPlus } from 'react-icons/bi';
 import toast, { Toaster } from 'react-hot-toast';
 import { FaUserCheck } from 'react-icons/fa';
+import { Link } from 'react-router';
 
 const GlobalUsersPage = () => {
   const db = getDatabase();
   const user= useSelector((state)=>state.userInfo.value)
   const [userList, setUserList]= useState([])
+  const [blockList, setBlockList]= useState([])
   const [chatUserId, setChatUserId]= useState([])
+  
+    const [filteredUser, setFilteredUser]= useState([])
   const [loading, setLoading]= useState(true)
+  const [dropdownOpen, setDropdownOpen]= useState(false)
 
   
     useEffect(() => {
@@ -33,11 +38,22 @@ const GlobalUsersPage = () => {
           }
         })
         setChatUserId(arr)
-
       });
     }, [])
-  
-console.log(chatUserId, "id");
+    useEffect(() => {
+        const starCountRef = ref(db, 'block/');
+        onValue(starCountRef, (snapshot) => {
+          let arr=[]
+          snapshot.forEach((item)=>{
+            const users= item.val()
+            if (users.blockerId==user?.uid || users.blockedId==user?.uid) {
+              arr.push(users.blockerId+users.blockedId)
+            }
+          })
+          setBlockList(arr)
+        });
+      }, [])
+    
 
   useEffect(() => {
     const starCountRef = ref(db, 'users/');
@@ -51,9 +67,10 @@ console.log(chatUserId, "id");
         }
       })
       setUserList(arr)
+      setFilteredUser(arr.filter((item)=>!(blockList.includes(item.id+user?.uid) || blockList.includes(user?.uid+item.id))))
       setLoading(false)
     });
-  }, [])
+  }, [blockList])
 
 const sentFriendReq=(reciver)=>{
   set(push(ref(db, "chatuser/")),{
@@ -61,7 +78,10 @@ const sentFriendReq=(reciver)=>{
     adderId: user?.uid,
     reciverName: reciver.username,
     reciverId: reciver.id
-  }).then(()=>toast.success("Added"))
+  }).then(()=>{
+    toast.success("Added")
+    // localStorage.setItem("isNew", "old")
+  })
 }
 
   
@@ -80,10 +100,15 @@ const sentFriendReq=(reciver)=>{
               <p className="text-green-100 text-base">{userList.length} users worldwide</p>
             </div>
           </div>
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center relative space-x-4">
+            {
+              dropdownOpen && <div className='absolute -bottom-[200%] right-0 w-20 h-10 z-[555] p-2 rounded-lg shadow-2xl text-black bg-white'>
+                <Link to="/blocklist">BlockList</Link>
+              </div>
+            }
             <BsGrid3X3Gap className="w-6 h-6 cursor-pointer hover:bg-green-700 hover:bg-opacity-50 rounded p-1 transition-colors" />
             <BsFilter className="w-6 h-6 cursor-pointer hover:bg-green-700 hover:bg-opacity-50 rounded p-1 transition-colors" />
-            <BsThreeDotsVertical className="w-6 h-6 cursor-pointer hover:bg-green-700 hover:bg-opacity-50 rounded p-1 transition-colors" />
+            <BsThreeDotsVertical onClick={()=>setDropdownOpen(!dropdownOpen)} className="w-6 h-6 cursor-pointer hover:bg-green-700 hover:bg-opacity-50 rounded p-1 transition-colors" />
           </div>
         </div>
 
@@ -134,7 +159,7 @@ const sentFriendReq=(reciver)=>{
       </div>
 
               ) : (<>
-                          {userList.map((item) => (
+                          {filteredUser.map((item) => (
               <div
                 key={item.id}
                 className="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-md hover:border-green-200 cursor-pointer transition-all duration-200"

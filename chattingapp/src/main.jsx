@@ -11,13 +11,17 @@ import { Provider } from 'react-redux'
 import { store } from './store/store.js'
 import GlobalUsersPage from './pages/GlobalUsersPage.jsx'
 import RootLayout from './pages/RootLayout.jsx'
+import Notification from './pages/Notification.jsx'
+import BlockList from './pages/BlockList.jsx'
 
 const router = createBrowserRouter([
   { path: "/", Component: RootLayout, children:[
     {
       index: true, element: <Home/>
     },
-{ path: "/allusers", Component: GlobalUsersPage }
+{ path: "/allusers", Component: GlobalUsersPage },
+{ path: "/blocklist", Component: BlockList },
+{ path: "/notification", Component: Notification }
   ] },
   { path: "/signup", Component: Signup },
   { path: "/login", Component: Login },

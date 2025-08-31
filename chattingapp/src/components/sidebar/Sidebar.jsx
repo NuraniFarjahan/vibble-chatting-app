@@ -9,6 +9,7 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { NavLink, useNavigate } from 'react-router';
 import { setUser } from '../../features/userInfoSlice';
+import { BiNotification } from 'react-icons/bi';
 
 // Sidebar Component
 export const Sidebar = ({ activeMenu = 'users', onMenuChange }) => {
@@ -20,6 +21,7 @@ export const Sidebar = ({ activeMenu = 'users', onMenuChange }) => {
   const menuItems = [
     { id: 'home', icon: BsHouseDoor, label: 'Home', link: "/" },
     { id: 'users', icon: BsPeople, label: 'Users', link:"/allusers" },
+    { id: 'notification', icon: BiNotification, label: 'Notification', link: "/notification" },
     { id: 'settings', icon: BsGear, label: 'Settings', link: "/setting" },
     { id: 'signout', icon: BsBoxArrowRight, label: 'Sign Out' }
   ];
@@ -35,16 +37,16 @@ export const Sidebar = ({ activeMenu = 'users', onMenuChange }) => {
   };
 
   return (
-    <div className="w-20 bg-white shadow-sm border-r border-gray-200 flex flex-col">
+    <div className="w-30 bg-white shadow-sm border-r border-gray-200 flex flex-col">
       {/* Logo/Brand */}
-      <div className="p-4 border-b border-gray-200">
+      <div className="p-4 border-b mx-auto border-gray-200">
         <div className="w-12 h-12 bg-green-600 rounded-xl flex items-center justify-center cursor-pointer hover:bg-green-700 transition-colors">
           {user?.displayName?.split(" ")[0][0]+user?.displayName?.split(" ")[1][0]}
         </div>
       </div>
 
       {/* Navigation Menu */}
-      <nav className="flex-1 py-6">
+      <nav className="flex-1 flex jusitfy-center py-6">
         <ul className="space-y-4">
           {menuItems.map((item) => {
             const IconComponent = item.icon;
@@ -78,7 +80,7 @@ export const Sidebar = ({ activeMenu = 'users', onMenuChange }) => {
       </nav>
 
       {/* User Profile */}
-      <div className="p-4 border-t border-gray-200">
+      <div className="p-4 border-t mx-auto border-gray-200">
         <div 
           className="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center text-white font-semibold cursor-pointer hover:bg-gray-400 transition-colors"
           title="Profile"
